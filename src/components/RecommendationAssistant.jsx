@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Sparkles, Users, Building2, Loader2, ChevronRight } from 'lucide-react';
 
@@ -25,7 +25,7 @@ export const RecommendationAssistant = () => {
 
   useEffect(() => {
     fetchRecommendations();
-  }, [userType]);
+  }, [fetchRecommendations]);
 
   const fetchRecommendations = async () => {
     setLoading(true);
