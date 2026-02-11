@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@layer base {
+    :root {
+        --background: 210 40% 98%;
+        --foreground: 215 20% 15%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 20% 15%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 215 20% 15%;
+        --primary: 215 25% 27%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 215 20% 15%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215 16% 47%;
+        --accent: 174 72% 24%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
+        --ring: 215 25% 27%;
+        --radius: 0.75rem;
+        
+        --aqi-good: 142 71% 45%;
+        --aqi-moderate: 38 92% 50%;
+        --aqi-unhealthy: 25 95% 53%;
+        --aqi-hazardous: 0 84% 60%;
+        --aqi-critical: 0 63% 31%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-slate-50 text-foreground;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-['Manrope'];
+    }
+}
+
+@layer utilities {
+    .glass-morphism {
+        @apply bg-white/80 backdrop-blur-xl border border-white/50 shadow-lg;
+    }
+    
+    .aqi-good {
+        @apply bg-emerald-500;
+    }
+    
+    .aqi-moderate {
+        @apply bg-amber-500;
+    }
+    
+    .aqi-unhealthy {
+        @apply bg-orange-500;
+    }
+    
+    .aqi-very-unhealthy {
+        @apply bg-red-500;
+    }
+    
+    .aqi-hazardous {
+        @apply bg-red-800;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+    }
+}
+
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+}
