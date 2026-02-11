@@ -15,7 +15,7 @@ export const TransparencyPanel = () => {
     if (isOpen && !transparency) {
       fetchTransparency();
     }
-  }, [isOpen]);
+  }, [isOpen, transparency]);
 
   const fetchTransparency = async () => {
     setLoading(true);

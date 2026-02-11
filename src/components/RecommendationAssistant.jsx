@@ -27,7 +27,7 @@ export const RecommendationAssistant = () => {
     fetchRecommendations();
   }, [fetchRecommendations]);
 
-  const fetchRecommendations = async () => {
+  const fetchRecommendations = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -41,7 +41,7 @@ export const RecommendationAssistant = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userType]);
 
   return (
     <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6 shadow-sm">
