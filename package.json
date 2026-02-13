@@ -61,7 +61,7 @@
     "zod": "^4.3.6"
   },
   "scripts": {
-    "start": "serve -s build -l 3000",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test"
   },

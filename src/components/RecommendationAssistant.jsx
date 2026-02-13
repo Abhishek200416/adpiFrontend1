@@ -2,9 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Sparkles, Users, Building2, Loader2, ChevronRight } from 'lucide-react';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
 const priorityColors = {
   high: 'border-red-500 bg-red-50',
   medium: 'border-amber-500 bg-amber-50',
@@ -23,25 +20,42 @@ export const RecommendationAssistant = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchRecommendations();
-  }, [fetchRecommendations]);
-
   const fetchRecommendations = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
+      // Get API URL from environment variable with fallback
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+      const API = `${BACKEND_URL}/api`;
+      
+      console.log('Fetching recommendations from:', `${API}/recommendations?user_type=${userType}`);
+      
       const response = await axios.get(`${API}/recommendations`, {
-        params: { user_type: userType }
+        params: { user_type: userType },
+        timeout: 30000 // 30 second timeout
       });
+      console.log('Recommendations response:', response.data);
       setRecommendations(response.data);
     } catch (err) {
-      setError('Failed to load recommendations');
       console.error('Error fetching recommendations:', err);
+      if (err.code === 'ECONNABORTED') {
+        setError('Request timed out. Please try again.');
+      } else if (err.response) {
+        setError(`Server error: ${err.response.status} - ${err.response.statusText}`);
+      } else if (err.request) {
+        setError('Unable to connect to server. Please check your connection.');
+      } else {
+        setError('Failed to load recommendations');
+      }
     } finally {
       setLoading(false);
     }
   }, [userType]);
+
+  // Fetch recommendations on mount and when userType changes
+  useEffect(() => {
+    fetchRecommendations();
+  }, [fetchRecommendations]);
 
   return (
     <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6 shadow-sm">
