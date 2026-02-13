@@ -1,10 +1,10 @@
 // craco.config.js
 const path = require("path");
-require("dotenv").config();
+const webpack = require("webpack");
 
 // Check if we're in development/preview mode (not production build)
 // Craco sets NODE_ENV=development for start, NODE_ENV=production for build
-const isDevServer = process.env.NODE_ENV !== "production";
+const isDevServer = process.env.NODE_ENV === "development";
 
 // Environment variable overrides
 const config = {
@@ -46,25 +46,42 @@ const webpackConfig = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
-    configure: (webpackConfig) => {
-
+    configure: (webpackConfig, { env, paths }) => {
+      // Ensure NODE_ENV is set correctly
+      const nodeEnv = env === 'production' ? 'production' : 'development';
+      
       // Add ignored patterns to reduce watched directories
-        webpackConfig.watchOptions = {
-          ...webpackConfig.watchOptions,
-          ignored: [
-            '**/node_modules/**',
-            '**/.git/**',
-            '**/build/**',
-            '**/dist/**',
-            '**/coverage/**',
-            '**/public/**',
+      webpackConfig.watchOptions = {
+        ...webpackConfig.watchOptions,
+        ignored: [
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/build/**',
+          '**/dist/**',
+          '**/coverage/**',
+          '**/public/**',
         ],
       };
+
+      // Remove React Refresh plugin in production
+      if (nodeEnv === 'production') {
+        webpackConfig.plugins = webpackConfig.plugins.filter(
+          plugin => plugin.constructor.name !== 'ReactRefreshPlugin'
+        );
+      }
+
+      // Add DefinePlugin to set NODE_ENV explicitly
+      webpackConfig.plugins.push(
+        new webpack.DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify(nodeEnv),
+        })
+      );
 
       // Add health check plugin to webpack if enabled
       if (config.enableHealthCheck && healthPluginInstance) {
         webpackConfig.plugins.push(healthPluginInstance);
       }
+      
       return webpackConfig;
     },
   },
